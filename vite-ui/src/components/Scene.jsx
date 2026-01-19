@@ -41,7 +41,7 @@ const INITIAL_PARAMS = {
 export const Scene = ({ onNetStatusChange }) => {
   const sceneRef = useRef(null);
   const carRef = useRef(null);
-  
+
   // Params state (could be expanded if dynamic config is needed)
   const [params] = useState(INITIAL_PARAMS);
 
@@ -51,7 +51,7 @@ export const Scene = ({ onNetStatusChange }) => {
   useEffect(() => {
     const handleKey = (e) => {
       if (e.code === 'KeyC') {
-        setActiveCam(prev => prev === 'chase' ? 'debug' : 'chase');
+        setActiveCam((prev) => (prev === 'chase' ? 'debug' : 'chase'));
       }
     };
     window.addEventListener('keydown', handleKey);
@@ -66,26 +66,26 @@ export const Scene = ({ onNetStatusChange }) => {
 
       // Canvas Focus
       if (sceneEl.canvas) {
-          sceneEl.canvas.setAttribute('tabindex', '0');
-          sceneEl.canvas.focus();
-          sceneEl.canvas.addEventListener('click', () => sceneEl.canvas.focus());
+        sceneEl.canvas.setAttribute('tabindex', '0');
+        sceneEl.canvas.focus();
+        sceneEl.canvas.addEventListener('click', () => sceneEl.canvas.focus());
       }
 
       const config = resolveConfig();
-      const controlLog = createControlLogger(); 
+      const controlLog = createControlLogger();
 
       // Mock HUD for React integration
       const hudAdapter = {
         setConnection: (level, detail) => {
-           onNetStatusChange(prev => ({ ...prev, level, label: level.toUpperCase(), detail: detail.join(' ') }));
+          onNetStatusChange((prev) => ({ ...prev, level, label: level.toUpperCase(), detail: detail.join(' ') }));
         },
         setMetrics: (metrics) => {
-           onNetStatusChange(prev => ({ ...prev, metrics: { ...metrics } }));
+          onNetStatusChange((prev) => ({ ...prev, metrics: { ...metrics } }));
         },
         setPose: (poseState) => {
-           // format pose string if needed, or pass object
-           const poseStr = `pos: ${poseState.x?.toFixed(2)}, ${poseState.y?.toFixed(2)}, ${poseState.z?.toFixed(2)}`;
-           onNetStatusChange(prev => ({ ...prev, pose: poseStr }));
+          // format pose string if needed, or pass object
+          const poseStr = `pos: ${poseState.x?.toFixed(2)}, ${poseState.y?.toFixed(2)}, ${poseState.z?.toFixed(2)}`;
+          onNetStatusChange((prev) => ({ ...prev, pose: poseStr }));
         },
       };
 
@@ -93,7 +93,7 @@ export const Scene = ({ onNetStatusChange }) => {
         hudAdapter.setConnection('degraded', ['local mode enabled']);
         return;
       }
-      
+
       if (!Array.isArray(config.signalingUrls) || config.signalingUrls.length === 0) {
         hudAdapter.setConnection('disconnected', ['No signaling URL set']);
         return;
@@ -105,7 +105,7 @@ export const Scene = ({ onNetStatusChange }) => {
 
       // Initialize Bridge
       const bridge = createNetBridge({ config, hud: hudAdapter, controlLog, carEl });
-      
+
       // Initial metrics update
       hudAdapter.setMetrics(bridge.metrics);
 
@@ -128,16 +128,16 @@ export const Scene = ({ onNetStatusChange }) => {
         return cleanup;
       } else {
         const onLoaded = () => {
-             const cleanup = initBridge();
-             // Since initBridge returns cleanup, but we can't return it from this listener easily in this pattern.
-             // We might need to store cleanup ref.
-             // For simplicity, we assume one-time load.
-             // But actually, useEffect cleanup handles unmount. 
-             // Ideally we should store the bridge instance ref.
+          const cleanup = initBridge();
+          // Since initBridge returns cleanup, but we can't return it from this listener easily in this pattern.
+          // We might need to store cleanup ref.
+          // For simplicity, we assume one-time load.
+          // But actually, useEffect cleanup handles unmount.
+          // Ideally we should store the bridge instance ref.
         };
         sceneEl.addEventListener('loaded', onLoaded, { once: true });
-        // Warning: cleaning up from the event listener path is tricky here. 
-        // Better to just run initBridge if loaded, or attach listener. 
+        // Warning: cleaning up from the event listener path is tricky here.
+        // Better to just run initBridge if loaded, or attach listener.
         // We will assume component stays mounted.
       }
     }
@@ -146,27 +146,20 @@ export const Scene = ({ onNetStatusChange }) => {
   // Handle Params that are set via DOM attributes in original code
   // We can pass them as props to components if they are strings
   // but A-Frame components parse generic objects sometimes too, but typically string attributes.
-  
+
   const physicsAttr = `driver: ${params.scene.driver}; debug: false; gravity: ${params.scene.gravity}`;
   const carBodyAttr = `shape: ${params.body.shape}; mass: ${params.body.mass}; linearDamping: ${params.body.linearDamping}; angularDamping: ${params.body.angularDamping}; type: ${params.body.type}`;
-  
+
   const cd = params.carDrive;
   const carDriveAttr = `forwardSign:${cd.forwardSign}; maxSpeed:${cd.maxSpeed}; accel:${cd.accel}; brake:${cd.brake}; coastDecel:${cd.coastDecel}; yawRate:${cd.yawRate}; yawSlew:${cd.yawSlew}; deadbandV:${cd.deadbandV}; deadbandW:${cd.deadbandW}; muRoll:${cd.muRoll}; airLin:${cd.airLin}; airQuad:${cd.airQuad}`;
-  
+
   const cc = params.chaseCam;
   const chaseCamAttr = `target: #car; dist: ${cc.dist}; height: ${cc.height}; stiffness: ${cc.stiffness}; lookAhead: ${cc.lookAhead}`;
 
   return (
-    <a-scene 
-      ref={sceneRef}
-      physics={physicsAttr} 
-      gamepad-controls=""
-    >
+    <a-scene ref={sceneRef} physics={physicsAttr} gamepad-controls="">
       <a-assets>
-        <a-asset-item
-          id="carModel"
-          src="/assets/kenney_car-kit/Models/GLB_format/sedan.glb"
-        ></a-asset-item>
+        <a-asset-item id="carModel" src="/assets/kenney_car-kit/Models/GLB_format/sedan.glb"></a-asset-item>
       </a-assets>
 
       <a-entity light="type: ambient; intensity: 0.6"></a-entity>
@@ -187,13 +180,7 @@ export const Scene = ({ onNetStatusChange }) => {
         position="0 1.6 8"
       ></a-entity>
 
-      <a-plane
-        rotation="-90 0 0"
-        width="80"
-        height="80"
-        color="#ccc"
-        static-body="shape: plane"
-      ></a-plane>
+      <a-plane rotation="-90 0 0" width="80" height="80" color="#ccc" static-body="shape: plane"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
       <a-gltf-model

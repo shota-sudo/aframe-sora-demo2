@@ -3,8 +3,8 @@ import React from 'react';
 export const Overlay = ({ netStatus, onEStop }) => {
   return (
     <>
-      <div 
-        id="netStatusPanel" 
+      <div
+        id="netStatusPanel"
         style={{
           position: 'absolute',
           top: '10px',
@@ -20,41 +20,39 @@ export const Overlay = ({ netStatus, onEStop }) => {
           boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
         }}
       >
-        <div 
-          id="netStatusLabel" 
+        <div
+          id="netStatusLabel"
           data-level={netStatus.level}
           style={{
             fontWeight: 700,
             marginBottom: '4px',
-            color: netStatus.level === 'connected' ? '#22c55e' :
-                   netStatus.level === 'degraded' ? '#f97316' : 
-                   '#ef4444'
+            color: netStatus.level === 'connected' ? '#22c55e' : netStatus.level === 'degraded' ? '#f97316' : '#ef4444',
           }}
         >
           {netStatus.label || 'INIT'}
         </div>
-        <div 
+        <div
           id="netStatusDetail"
           style={{
             opacity: 0.85,
-            marginBottom: '4px'
+            marginBottom: '4px',
           }}
         >
           {netStatus.detail || '--'}
         </div>
-        <div 
-          id="netMetrics"
-          style={{ opacity: 0.72 }}
-        >
-          {netStatus.metrics && Object.entries(netStatus.metrics).map(([k, v]) => (
-            <div key={k}>{k}: {v}</div>
-          ))}
+        <div id="netMetrics" style={{ opacity: 0.72 }}>
+          {netStatus.metrics &&
+            Object.entries(netStatus.metrics).map(([k, v]) => (
+              <div key={k}>
+                {k}: {v}
+              </div>
+            ))}
         </div>
-        <div 
+        <div
           id="poseInfo"
           style={{
             marginTop: '4px',
-            fontFamily: 'monospace'
+            fontFamily: 'monospace',
           }}
         >
           {netStatus.pose || 'pos: --'}
