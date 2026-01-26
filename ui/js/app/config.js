@@ -1,15 +1,22 @@
-const DEFAULT_CONFIG = {
-  signalingUrls: ['wss://sora2.uclab.jp/signaling'],
-  channelId: 'aframe-demo',
-  ctrlLabel: 'ctrl',
-  stateLabel: 'state',
-  cameraTrackLabel: 'camera-thumb',
-  metadata: null,
-  debug: false,
-  mode: 'net',
-};
+// const DEFAULT_CONFIG = {
+//   signalingUrls: ['wss://sora2.uclab.jp/signaling'],
+//   channelId: 'aframe-demo',
+//   ctrlLabel: 'ctrl',
+//   stateLabel: 'state',
+//   cameraTrackLabel: 'camera-thumb',
+//   metadata: null,
+//   debug: false,
+//   mode: 'net',
+// };
 
 const META_ENV = import.meta?.env ?? {};
+const ENV_CONFIG = {};
+
+if (META_ENV.VITE_SORA_SIGNALING_URLS) ENV_CONFIG.signalingUrls = META_ENV.VITE_SORA_SIGNALING_URLS;
+if (META_ENV.VITE_SORA_CHANNEL_ID) ENV_CONFIG.channelId = META_ENV.VITE_SORA_CHANNEL_ID;
+if (META_ENV.VITE_CTRL_LABEL) ENV_CONFIG.ctrlLabel = META_ENV.VITE_CTRL_LABEL;
+if (META_ENV.VITE_STATE_LABEL) ENV_CONFIG.stateLabel = META_ENV.VITE_STATE_LABEL;
+if (META_ENV.VITE_SORA_METADATA) ENV_CONFIG.metadata = META_ENV.VITE_SORA_METADATA;
 
 function parseArray(input) {
   if (!input) return [];
@@ -40,7 +47,7 @@ function ensureLabel(value, fallback) {
 }
 
 export function resolveConfig() {
-  const envConfig = DEFAULT_CONFIG;
+  const envConfig = ENV_CONFIG;
   const globalConfig = typeof window !== 'undefined' ? window.NET_CONFIG || {} : {};
   const bodyConfig = document.body?.dataset?.netConfig
     ? parseMaybeJson(document.body.dataset.netConfig)

@@ -184,8 +184,9 @@ export const Scene = ({ onNetStatusChange }) => {
       <a-sky color="#ECECEC"></a-sky>
 
       <a-gltf-model
-        src="assets/kenney_car-kit/MapViewer3Dpts_out_normal_white_200mm.glb"
-        rotation="-90 0 0"
+        src="/assets/kenney_car-kit/solar.glb"
+        rotation="0 0 0"
+        position="0 1 0"
       ></a-gltf-model>
 
       <a-entity
