@@ -1,5 +1,5 @@
 ## UI
-cd ui
+cd vite-ui
 npm run dev
 
 ## manager
@@ -14,7 +14,7 @@ source ~/venv-sora/bin/activate
 source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=10
 printenv | grep ROS
-python3 rpi/state_recv.py --publish-cmd-vel --cmd-vel-topic /cmd_vel --log-level DEBUG（TIMELINEを使って遅延を見たい時：python3 -m rpi.state_recv --log-level INFO 2>&1 | grep TIMELINE）
+python3 rpi/state_recv.py --publish-cmd-vel --cmd-vel-topic /cmd_vel --log-level DEBUG（TIMELINEを使って遅延を見たい時：python3 -m rpi.state_recv --log-level INFO 2>&1 | grep TIMELINcd uiE）
 
 ## Jetson
 dns-sd -G v4 orin02.local
